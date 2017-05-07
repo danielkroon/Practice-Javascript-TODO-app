@@ -1,0 +1,16 @@
+/* Base Styles -------------------- */
+* {
+  box-sizing: border-box; }
+
+/* Pseudo-classes ------------------ */
+a:link {
+  color: #ffa949;
+  text-decoration: none; }
+
+a:visited {
+  color: #add8e6; }
+
+a:hover {
+  color: rgba(255, 169, 73, 0.5); }
+
+/*# sourceMappingURL=styles.css.map */
