@@ -65,4 +65,21 @@ var todoList = {
 		this.displayTodos();
 	}
 };
+
+var handlers = {
+	displayTodos: function() {
+		todoList.displayTodos();
+	},
+	toggleAll: function() {
+		todoList.toggleAll();
+	},
+	addTodo: function() {
+		var addTodoTextInput = document.getElementById('addTodoTextInput');
+		var addTodoTime = document.getElementById('addTodoTime');
+		todoList.addTodo(addTodoTextInput.value, addTodoTime.value);
+		addTodoTextInput.value = '';
+		addTodoTime.value = '';
+
+	}
+};
 //# sourceMappingURL=app.js.map
