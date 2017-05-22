@@ -21,8 +21,9 @@ var todoList = {
 		});
 		this.displayTodos();
 	},
-	changeTodo: function(position, todoText) {
+	changeTodo: function(position, todoText, time) {
 		this.todos[position].todoText = todoText;
+		this.todos[position].time = time;
 		this.displayTodos();
 	},
 	changeTime: function(position, time) {
@@ -34,6 +35,7 @@ var todoList = {
 		this.displayTodos();
 	},
 	toggleCompleted: function(position) {
+		debugger;
 		var todo = this.todos[position];
 		todo.completed = !todo.completed;
 		this.displayTodos();
@@ -80,6 +82,26 @@ var handlers = {
 		addTodoTextInput.value = '';
 		addTodoTime.value = '';
 
+	},
+	changeTodo: function() {
+		debugger;
+		var changeTodoPositionInput = document.getElementById('changeTodoPositionInput');
+		var changeTodoTextInput = document.getElementById('changeTodoTextInput');
+		var changeTodoTimeInput = document.getElementById('changeTodoTimeInput');
+		todoList.changeTodo(changeTodoPositionInput.valueAsNumber, changeTodoTextInput.value, changeTodoTimeInput.valueAsNumber);
+		changeTodoPositionInput.value = '';
+		changeTodoTextInput.value = '';
+		changeTodoTimeInput.value = '';
+	},
+	deleteTodo: function() {
+		var deleteTodoPositionInput = document.getElementById('deleteTodoPositionInput');
+		todoList.deleteTodo(deleteTodoPositionInput.valueAsNumber);
+		deleteTodoPositionInput.value = '';
+	},
+	toggleCompleted: function() {
+		var toggleCompletedPositionInput = document.getElementById('toggleCompletedPositionInput');
+		todoList.toggleCompleted(toggleCompletedPositionInput.valueAsNumber);
+		toggleCompletedPositionInput.value = '';
 	}
 };
 //# sourceMappingURL=app.js.map

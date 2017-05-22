@@ -61,6 +61,23 @@
         <input type="text" id="addTodoTextInput" placeholder="todo">
         <input type="text" id="addTodoTime" placeholder="time">
       </div>
+      
+      <div>
+          <button type="button" onclick="handlers.changeTodo()">Change Todo</button>
+          <input type="number" id="changeTodoPositionInput" placeholder="0">
+          <input type="text" id="changeTodoTextInput" placeholder="change todo">
+          <input type="number" id="changeTodoTimeInput" placeholder="1">
+      </div>
+      
+      <div>
+          <button type="button" onclick="handlers.deleteTodo()">Delete</button>
+          <input type="number" id="deleteTodoPositionInput" placeholder="0">
+      </div>
+      
+      <div>
+          <button type="button" onclick="handlers.toggleCompleted()">Toggle Completed</button>
+          <input type="number" id="toggleCompletedPositionInput">
+      </div>
     
     
     <!-- SCRIPTS -->
