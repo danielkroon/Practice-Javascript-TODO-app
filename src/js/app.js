@@ -1,11 +1,16 @@
 var todoList = {
 	todos: [],
 	addTodo: function(todoText, time) {
-		this.todos.push({
+		var data = 	{
 			todoText: todoText,
 			completed: false,
 			time: time
-		});
+		};
+		var newTodoKey = firebase.database().ref().child('todos').push().key;
+		var updates = {};
+		updates['/todos/' + newTodoKey] = data;
+		
+		return firebase.database().ref().update(updates);	
 	},
 	changeTodo: function(position, todoText, time) {
 		this.todos[position].todoText = todoText;
@@ -54,7 +59,7 @@ var handlers = {
 		todoList.addTodo(addTodoTextInput.value, addTodoTime.value);
 		addTodoTextInput.value = '';
 		addTodoTime.value = '';
-		view.displayTodos();
+		// view.displayTodos();
 	},
 	changeTodo: function() {
 		var changeTodoPositionInput = document.getElementById('changeTodoPositionInput');
@@ -68,7 +73,6 @@ var handlers = {
 	},
 	deleteTodo: function(position) {
 		todoList.deleteTodo(position);
-		deleteTodoPositionInput.value = '';
 		view.displayTodos();
 	},
 	toggleCompleted: function() {
@@ -86,8 +90,8 @@ var handlers = {
 var view = {
 	displayTodos: function() {
 		var todosUl = document.querySelector('ul');
-		todosUl.innerHTML = ''; 
-		
+		todosUl.innerHTML = '';
+	
 		for (var i = 0; i < todoList.todos.length; i++) {
 			var todoLi = document.createElement('li');
 			var todo = todoList.todos[i];
@@ -125,6 +129,13 @@ var view = {
 		});
 	}
 };
+
+var todoRef = firebase.database().ref('todos');
+
+todoRef.on('child_added', function(data) {
+	todoList.todos.push(data.val());
+	view.displayTodos();
+});
 
 view.setUpEventListeners();
 
