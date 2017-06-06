@@ -1,3 +1,5 @@
+var todoRef = firebase.database().ref('todos');
+
 var todoList = {
 	todos: [],
 	addTodo: function(todoText, time) {
@@ -6,7 +8,11 @@ var todoList = {
 			completed: false,
 			time: time
 		};
+		
+		 // Get a key for a new Todo.
 		var newTodoKey = firebase.database().ref().child('todos').push().key;
+		
+		// Write the new todo data simultaneously in the todo list.
 		var updates = {};
 		updates['/todos/' + newTodoKey] = data;
 		
@@ -21,6 +27,9 @@ var todoList = {
 	},
 	deleteTodo: function(position) {
 		this.todos.splice(position, 1);
+		var todo = this.todos[position];
+		
+		todoRef.remove();
 	},
 	toggleCompleted: function(position) {
 		var todo = this.todos[position];
@@ -31,24 +40,21 @@ var todoList = {
 		var completedTodos = 0;
 		
 		// Get number of compeleted todos
-		for (var i = 0; i < totalTodos; i++) {
-			if (this.todos[i].completed === true) {
+		this.todos.forEach(function(todo) {
+			if (todo.completed === true) {
 				completedTodos++;
 			}
-		}
-		
-		// Case 1: If everything's true, make everything false.
-		if (completedTodos === totalTodos) {
-			// Make everything false
-			for (var i = 0; i < totalTodos; i++) {
-				this.todos[i].completed = false;
-			}
-		// Case 2: Otherwise, make everything true.	
-		} else {
-			for (var i = 0; i < totalTodos; i++) {
-				this.todos[i].completed = true;
-			}
-		}
+		});
+
+		this.todos.forEach(function(todo) {
+			// Case 1: If everything's true, make everything false.
+			if (completedTodos === totalTodos) {
+				todo.completed = false;
+			// Case 2: Otherwise, make everything true.
+			} else {
+				todo.completed = true;
+			}	
+		});
 	}
 };
 
@@ -91,10 +97,10 @@ var view = {
 	displayTodos: function() {
 		var todosUl = document.querySelector('ul');
 		todosUl.innerHTML = '';
-	
-		for (var i = 0; i < todoList.todos.length; i++) {
+		
+		// this inside the forEach callback refers to the view object 
+		todoList.todos.forEach(function(todo, position,) {
 			var todoLi = document.createElement('li');
-			var todo = todoList.todos[i];
 			var todoTextWithCompletion = '';
 			
 			if (todo.completed === true) {
@@ -103,11 +109,11 @@ var view = {
 				todoTextWithCompletion = '( ) ' + todo.todoText + todo.time;
 			}
 			
-			todoLi.id = i;
+			todoLi.id = position;
 			todoLi.textContent = todoTextWithCompletion;
 			todoLi.appendChild(this.createDeleteButton());
 			todosUl.appendChild(todoLi);
-		}
+		}, this);
 	},
 	createDeleteButton: function() {
 		var deleteButton = document.createElement('button');
@@ -130,11 +136,13 @@ var view = {
 	}
 };
 
-var todoRef = firebase.database().ref('todos');
-
 todoRef.on('child_added', function(data) {
 	todoList.todos.push(data.val());
 	view.displayTodos();
+});
+
+todoRef.on('child_removed', function(data) {
+	console.log('todo removed', data.val());
 });
 
 view.setUpEventListeners();
