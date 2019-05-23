@@ -1,4 +1,4 @@
-# Personal Gulp Boilerplate
+# Practical Javascript Course
 
 ## Getting Started
 
